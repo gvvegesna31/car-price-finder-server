@@ -4,19 +4,20 @@
   <meta charset="UTF-8" />
   <title>Car Price Finder</title>
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  https://fonts.googleapis.com/css2?family=Poppins:wght@300;500;700&display=swap
+  <!-- Fonts -->
+  <!-- https://fonts.googleapis.com/css2?family=Lobster+Two:wght@700&display=swap  -->
+
   <style>
     :root {
       --bg: #0f1220;
       --primary: #7c5cff;
       --accent: #39d98a;
-      --glass: rgba(255,255,255,0.08);
       --text: #e7e7ef;
     }
     * { box-sizing: border-box; }
     body {
       margin: 0;
-      font-family: 'Poppins', system-ui, -apple-system, Segoe UI, Roboto, sans-serif;
+      font-family: 'Poppins', sans-serif;
       color: var(--text);
       background:
         radial-gradient(1000px 600px at 10% 10%, rgba(124,92,255,0.25), transparent 60%),
@@ -36,29 +37,40 @@
       backdrop-filter: blur(12px);
       padding: 28px;
     }
-    .title {
-      font-size: 2rem;
-      font-weight: 700;
-      letter-spacing: 0.5px;
-      display: flex;
-      align-items: center;
-      gap: 12px;
+    /* Centered Title */
+    .title-centered {
+      text-align: center;
+      margin-bottom: 24px;
+      animation: fadeIn 1.2s ease-out;
     }
-    .title .badge {
-      background: linear-gradient(135deg, var(--primary), #a589ff);
-      color: white;
-      font-size: 0.85rem;
-      padding: 6px 12px;
-      border-radius: 999px;
-      box-shadow: 0 10px 20px rgba(124,92,255,0.35);
+    .main-title {
+      font-family: 'Lobster Two', cursive;
+      font-size: 3.2rem;
+      font-weight: 700;
+      background: linear-gradient(135deg, #dbdbdb, #39d98a);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      text-shadow: 0 2px 12px rgba(255, 255, 255, 0.4);
+      letter-spacing: 1.2px;
+      animation: glowPulse 3s infinite ease-in-out;
+    }
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(-10px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+    @keyframes glowPulse {
+      0%, 100% { text-shadow: 0 2px 12px rgba(124,92,255,0.4); }
+      50% { text-shadow: 0 2px 18px rgba(124,92,255,0.6); }
     }
     .search {
       margin-top: 20px;
       display: flex;
       gap: 12px;
+      justify-content: center;
     }
     .search input {
       flex: 1;
+      max-width: 500px;
       padding: 16px 18px;
       border-radius: 14px;
       border: 1px solid rgba(255,255,255,0.18);
@@ -90,9 +102,7 @@
       grid-template-columns: 1.1fr 0.9fr;
       gap: 18px;
     }
-    @media (max-width: 860px) {
-      .grid { grid-template-columns: 1fr; }
-    }
+    @media (max-width: 860px) { .grid { grid-template-columns: 1fr; } }
     .image-box {
       position: relative;
       overflow: hidden;
@@ -100,9 +110,12 @@
       border: 1px solid rgba(255,255,255,0.12);
       background: rgba(20,24,40,0.55);
       min-height: 280px;
+      display: grid;
+      place-items: center;
     }
     .image-box img {
-      width: 100%; height: 100%;
+      width: 100%;
+      height: 100%;
       object-fit: cover;
       display: block;
     }
@@ -122,15 +135,8 @@
       background: rgba(20,24,40,0.55);
       padding: 16px;
     }
-    .model {
-      font-size: 1.4rem;
-      font-weight: 700;
-    }
-    .subtitle {
-      margin-top: 8px;
-      color: #cbd5e1;
-      font-weight: 400;
-    }
+    .model { font-size: 1.4rem; font-weight: 700; }
+    .subtitle { margin-top: 8px; color: #cbd5e1; font-weight: 400; }
     .prices {
       margin-top: 16px;
       display: grid;
@@ -145,41 +151,38 @@
     }
     .p-label { color: #cbd5e1; font-size: 0.9rem; }
     .p-value { font-weight: 700; font-size: 1.2rem; }
-    .small {
-      margin-top: 8px;
-      font-size: 0.81rem;
-      color: #9aa6b2;
-    }
+    .small { margin-top: 8px; font-size: 0.81rem; color: #9aa6b2; }
     .sources { margin-top: 12px; display: grid; gap: 6px; }
-    .sources a {
-      color: #9dd8ff;
-      text-decoration: none;
-      font-size: 0.9rem;
-    }
-    .footer {
-      margin-top: 30px;
-      font-size: 0.8rem;
-      color: #94a3b8;
-    }
+    .sources a { color: #9dd8ff; text-decoration: none; font-size: 0.9rem; }
+    .footer { margin-top: 30px; font-size: 0.8rem; color: #94a3b8; }
     .loading {
       animation: shimmer 1.3s infinite linear;
       background: linear-gradient(90deg, rgba(255,255,255,0.06) 0%, rgba(255,255,255,0.16) 50%, rgba(255,255,255,0.06) 100%);
       background-size: 300% 100%;
+      width: 100%; height: 100%;
+      border-radius: 18px;
     }
     @keyframes shimmer { 0% { background-position: 0 0; } 100% { background-position: 200% 0; } }
   </style>
 </head>
 <body>
+        <!-- Centered Title -->
+    <div class="title-centered">
+      <h1 class="main-title">Car Price Finder</h1>
+    </div>
   <div class="card">
-    <div class="title">Car Price Finder <span class="badge">AI powered</span></div>
+   
+
+    <!-- Search Bar -->
     <div class="search">
       <input id="q" type="text" placeholder="Type a car name (e.g., Baleno, Nexon, Creta)..." />
       <button id="go">Search</button>
     </div>
 
+    <!-- Results -->
     <div id="result" class="grid" style="display:none;">
       <div class="image-box" id="imageBox">
-        <div class="loading" style="width:100%;height:100%;"></div>
+        <div class="loading"></div>
       </div>
       <div class="info-box">
         <div class="model" id="model"></div>
@@ -202,49 +205,67 @@
   </div>
 
   <script>
+    const API_BASE = "https://car-price-finder-backend.onrender.com"; // Replace with your Render URL
     const $ = sel => document.querySelector(sel);
 
-    async function doSearch() {
-      const q = $('#q').value.trim();
-      if (!q) return;
+    function setLoadingUI(q) {
       $('#result').style.display = 'grid';
-      $('#imageBox').innerHTML = '<div class="loading" style="width:100%;height:100%;"></div>';
-      $('#model').textContent = 'Loading...';
+      $('#imageBox').innerHTML = '<div class="loading"></div>';
+      $('#model').textContent = `Searching "${q}"...`;
       $('#subtitle').textContent = '';
       $('#startPrice').textContent = '—';
       $('#topPrice').textContent = '—';
       $('#basis').textContent = '';
       $('#sources').innerHTML = '';
       $('#footer').textContent = '';
+    }
+
+    function renderImageBlock(img) {
+      if (!img || !img.url) {
+        $('#imageBox').innerHTML = `<div style="padding:20px;color:#cbd5e1;">No image found.</div>`;
+        return;
+      }
+      const host = (() => { try { return new URL(img.source || img.url).hostname; } catch { return ''; } })();
+      $('#imageBox').innerHTML = `
+        ${img.url}
+        ${host ? `<div class="src">Image: ${host}</div>` : ''}
+      `;
+    }
+
+    function renderSources(list = []) {
+      const srcs = list.slice(0, 4);
+      if (!srcs.length) {
+        $('#sources').innerHTML = `<div class="small">No sources provided.</div>`;
+        return;
+      }
+      $('#sources').innerHTML = srcs.map(u => {
+        let host = '';
+        try { host = new URL(u).hostname; } catch {}
+        const label = host || u;
+        return `${u}Source: ${label}</a>`;
+      }).join('');
+    }
+
+    async function doSearch() {
+      const q = $('#q').value.trim();
+      if (!q) return;
+      setLoadingUI(q);
 
       try {
-        const resp = await fetch(`http://localhost:8080/api/search?q=${encodeURIComponent(q)}`);
+        const resp = await fetch(`${API_BASE}/api/search?q=${encodeURIComponent(q)}`);
+        if (!resp.ok) throw new Error(`HTTP ${resp.status}`);
         const data = await resp.json();
 
-        const title = [data.brand, data.model].filter(Boolean).join(' ');
-        $('#model').textContent = title || q;
+        const title = [data.brand, data.model].filter(Boolean).join(' ') || q;
+        $('#model').textContent = title;
         $('#subtitle').textContent = data.info || 'Details not available.';
         $('#startPrice').textContent = data.prices?.starting_lakhs || 'N/A';
         $('#topPrice').textContent = data.prices?.top_lakhs || 'N/A';
         $('#basis').textContent = `Basis: ${data.prices?.basis || 'ex-showroom (likely)'}`;
 
-        // Image
-        if (data.image?.url) {
-          $('#imageBox').innerHTML = `${data.image.url}` +
-            (data.image.source ? `<div class="src">Image: ${new URL(data.image.source).hostname}</div>` : '');
-        } else {
-          $('#imageBox').innerHTML = `<div style="padding:20px;color:#cbd5e1;">No image found.</div>`;
-        }
+        renderImageBlock(data.image);
+        renderSources(data.sources);
 
-        // Sources
-        const srcs = (data.sources || []).slice(0,4);
-        $('#sources').innerHTML = srcs.map(u => {
-          let host = '';
-          try { host = new URL(u).hostname; } catch {}
-          return `${u}Source: ${host || u}</a>`;
-        }).join('');
-
-        // Footer
         const dt = new Date(data.last_checked || Date.now());
         $('#footer').textContent = `${data.disclaimer || 'Prices subject to change.'} Last checked: ${dt.toLocaleString()}`;
       } catch (err) {
