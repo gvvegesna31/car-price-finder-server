@@ -5,7 +5,7 @@
   <title>Car Price Finder</title>
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <!-- Fonts -->
-  <!-- https://fonts.googleapis.com/css2?family=Lobster+Two:wght@700&display=swap  -->
+  <link href="https://fonts.googleapis.com/css2?family=Lobster+Two:wght@700&family=Poppins:wght@300;500;700&display=swap" rel="stylesheet">
 
   <style>
     :root {
@@ -17,7 +17,7 @@
     * { box-sizing: border-box; }
     body {
       margin: 0;
-      font-family: 'Poppins', sans-serif;
+      font-family: 'Poppins', system-ui, -apple-system, Segoe UI, Roboto, sans-serif;
       color: var(--text);
       background:
         radial-gradient(1000px 600px at 10% 10%, rgba(124,92,255,0.25), transparent 60%),
@@ -37,21 +37,20 @@
       backdrop-filter: blur(12px);
       padding: 28px;
     }
-    /* Centered Title */
     .title-centered {
       text-align: center;
-      margin-bottom: 24px;
+      margin-bottom: 20px;
       animation: fadeIn 1.2s ease-out;
     }
     .main-title {
       font-family: 'Lobster Two', cursive;
       font-size: 3.2rem;
       font-weight: 700;
-      background: linear-gradient(135deg, #dbdbdb, #39d98a);
+      background: linear-gradient(135deg, #7c5cff, #39d98a);
       -webkit-background-clip: text;
       -webkit-text-fill-color: transparent;
-      text-shadow: 0 2px 12px rgba(255, 255, 255, 0.4);
-      letter-spacing: 1.2px;
+      text-shadow: 0 2px 12px rgba(124,92,255,0.45);
+      letter-spacing: 1.1px;
       animation: glowPulse 3s infinite ease-in-out;
     }
     @keyframes fadeIn {
@@ -59,18 +58,18 @@
       to { opacity: 1; transform: translateY(0); }
     }
     @keyframes glowPulse {
-      0%, 100% { text-shadow: 0 2px 12px rgba(124,92,255,0.4); }
-      50% { text-shadow: 0 2px 18px rgba(124,92,255,0.6); }
+      0%, 100% { text-shadow: 0 2px 12px rgba(124,92,255,0.45); }
+      50% { text-shadow: 0 2px 18px rgba(124,92,255,0.65); }
     }
     .search {
-      margin-top: 20px;
+      margin-top: 10px;
       display: flex;
       gap: 12px;
       justify-content: center;
     }
     .search input {
       flex: 1;
-      max-width: 500px;
+      max-width: 520px;
       padding: 16px 18px;
       border-radius: 14px;
       border: 1px solid rgba(255,255,255,0.18);
@@ -93,9 +92,9 @@
       color: #0b0e1a;
       font-weight: 700;
       box-shadow: 0 12px 24px rgba(57,217,138,0.35);
-      transition: transform 0.15s ease;
+      transition: transform 0.15s ease, box-shadow 0.2s ease;
     }
-    .search button:hover { transform: translateY(-1px); }
+    .search button:hover { transform: translateY(-1px); box-shadow: 0 14px 26px rgba(57,217,138,0.42); }
     .grid {
       margin-top: 24px;
       display: grid;
@@ -153,7 +152,13 @@
     .p-value { font-weight: 700; font-size: 1.2rem; }
     .small { margin-top: 8px; font-size: 0.81rem; color: #9aa6b2; }
     .sources { margin-top: 12px; display: grid; gap: 6px; }
-    .sources a { color: #9dd8ff; text-decoration: none; font-size: 0.9rem; }
+    .sources a {
+      color: #9dd8ff;
+      text-decoration: none;
+      font-size: 0.9rem;
+      overflow-wrap: anywhere;
+      display: inline-block;
+    }
     .footer { margin-top: 30px; font-size: 0.8rem; color: #94a3b8; }
     .loading {
       animation: shimmer 1.3s infinite linear;
@@ -166,19 +171,16 @@
   </style>
 </head>
 <body>
-        <!-- Centered Title -->
+  <div class="card">
+    <!-- Centered Title -->
     <div class="title-centered">
       <h1 class="main-title">Car Price Finder</h1>
     </div>
-  <div class="card">
-   
-
     <!-- Search Bar -->
     <div class="search">
       <input id="q" type="text" placeholder="Type a car name (e.g., Baleno, Nexon, Creta)..." />
       <button id="go">Search</button>
     </div>
-
     <!-- Results -->
     <div id="result" class="grid" style="display:none;">
       <div class="image-box" id="imageBox">
@@ -203,9 +205,10 @@
       </div>
     </div>
   </div>
-
   <script>
-    const API_BASE = "https://car-price-finder-backend.onrender.com"; // Replace with your Render URL
+    // 👉 Replace with your Render backend URL (HTTPS)
+    const API_BASE = "https://car-price-finder-backend.onrender.com";
+
     const $ = sel => document.querySelector(sel);
 
     function setLoadingUI(q) {
@@ -220,6 +223,7 @@
       $('#footer').textContent = '';
     }
 
+    // Renders the actual car image in the image box
     function renderImageBlock(img) {
       if (!img || !img.url) {
         $('#imageBox').innerHTML = `<div style="padding:20px;color:#cbd5e1;">No image found.</div>`;
@@ -227,11 +231,12 @@
       }
       const host = (() => { try { return new URL(img.source || img.url).hostname; } catch { return ''; } })();
       $('#imageBox').innerHTML = `
-        ${img.url}
+        <img src="${img.url}" alt="Car image" referrerpolicy="no-referrer" />
         ${host ? `<div class="src">Image: ${host}</div>` : ''}
       `;
     }
 
+    // Renders clickable links for the data sources
     function renderSources(list = []) {
       const srcs = list.slice(0, 4);
       if (!srcs.length) {
@@ -242,7 +247,7 @@
         let host = '';
         try { host = new URL(u).hostname; } catch {}
         const label = host || u;
-        return `${u}Source: ${label}</a>`;
+        return `<a href="${u}" target="_blank" rel="noopener noreferrer">Source: ${label}</a>`;
       }).join('');
     }
 
@@ -253,7 +258,10 @@
 
       try {
         const resp = await fetch(`${API_BASE}/api/search?q=${encodeURIComponent(q)}`);
-        if (!resp.ok) throw new Error(`HTTP ${resp.status}`);
+        if (!resp.ok) {
+          const text = await resp.text();
+          throw new Error(`HTTP ${resp.status}: ${text}`);
+        }
         const data = await resp.json();
 
         const title = [data.brand, data.model].filter(Boolean).join(' ') || q;
@@ -271,7 +279,7 @@
       } catch (err) {
         console.error(err);
         $('#model').textContent = 'Error fetching results';
-        $('#subtitle').textContent = 'Please try again.';
+        $('#subtitle').textContent = err?.message || 'Please try again.';
         $('#imageBox').innerHTML = `<div style="padding:20px;color:#cbd5e1;">Something went wrong.</div>`;
       }
     }
